@@ -1,0 +1,19 @@
+[remap]
+
+importer="wavefront_obj"
+type="Mesh"
+path="res://.import/csgterrain.obj-bad7725728c4a69ab4c272c416510413.mesh"
+
+[deps]
+
+files=[ "res://.import/csgterrain.obj-bad7725728c4a69ab4c272c416510413.mesh" ]
+
+source_file="res://csgterrain.obj"
+dest_files=[ "res://.import/csgterrain.obj-bad7725728c4a69ab4c272c416510413.mesh", "res://.import/csgterrain.obj-bad7725728c4a69ab4c272c416510413.mesh" ]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3( 1, 1, 1 )
+offset_mesh=Vector3( 0, 0, 0 )
+optimize_mesh=true

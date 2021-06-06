@@ -1,0 +1,160 @@
+[gd_scene load_steps=30 format=2]
+
+[ext_resource path="res://materials/skin.tres" type="Material" id=1]
+[ext_resource path="res://blade.tscn" type="PackedScene" id=2]
+[ext_resource path="res://player/t_pose.glb" type="PackedScene" id=3]
+
+[sub_resource type="AnimationNodeAnimation" id=8]
+animation = "running_loop"
+
+[sub_resource type="AnimationNodeTimeScale" id=9]
+
+[sub_resource type="AnimationNodeTimeScale" id=10]
+
+[sub_resource type="AnimationNodeTimeScale" id=33]
+
+[sub_resource type="AnimationNodeTimeScale" id=36]
+
+[sub_resource type="AnimationNodeTimeScale" id=11]
+
+[sub_resource type="AnimationNodeTransition" id=12]
+input_count = 3
+xfade_time = 0.15
+input_0/name = "aiming"
+input_0/auto_advance = false
+input_1/name = "not_aiming"
+input_1/auto_advance = false
+input_2/name = "falling"
+input_2/auto_advance = false
+
+[sub_resource type="AnimationNodeAnimation" id=13]
+animation = "falling_loop"
+
+[sub_resource type="AnimationNodeOneShot" id=34]
+
+[sub_resource type="AnimationNodeAnimation" id=35]
+animation = "hit"
+
+[sub_resource type="AnimationNodeAnimation" id=14]
+animation = "idle_loop"
+
+[sub_resource type="AnimationNodeBlend3" id=15]
+
+[sub_resource type="AnimationNodeTimeScale" id=16]
+
+[sub_resource type="AnimationNodeOneShot" id=17]
+
+[sub_resource type="AnimationNodeAnimation" id=18]
+animation = "slide"
+
+[sub_resource type="AnimationNodeAnimation" id=27]
+animation = "idle_loop"
+
+[sub_resource type="AnimationNodeAnimation" id=28]
+animation = "walk_loop"
+
+[sub_resource type="AnimationNodeAnimation" id=29]
+animation = "walk_backward_loop"
+
+[sub_resource type="AnimationNodeAnimation" id=30]
+animation = "left_strafe_loop"
+
+[sub_resource type="AnimationNodeAnimation" id=31]
+animation = "right_strafe_loop"
+
+[sub_resource type="AnimationNodeBlendSpace2D" id=24]
+blend_point_0/node = SubResource( 27 )
+blend_point_0/pos = Vector2( 0, 0 )
+blend_point_1/node = SubResource( 28 )
+blend_point_1/pos = Vector2( 0, 1 )
+blend_point_2/node = SubResource( 29 )
+blend_point_2/pos = Vector2( 0, -1 )
+blend_point_3/node = SubResource( 30 )
+blend_point_3/pos = Vector2( -1, 0 )
+blend_point_4/node = SubResource( 31 )
+blend_point_4/pos = Vector2( 1, 0 )
+
+[sub_resource type="AnimationNodeAnimation" id=25]
+animation = "walk_loop"
+
+[sub_resource type="AnimationNodeTimeScale" id=26]
+
+[sub_resource type="AnimationNodeOneShot" id=37]
+
+[sub_resource type="AnimationNodeAnimation" id=38]
+animation = "withdraw"
+
+[sub_resource type="AnimationNodeBlendTree" id=32]
+graph_offset = Vector2( 1168.15, 81.4802 )
+nodes/Run/node = SubResource( 8 )
+nodes/Run/position = Vector2( 26.6667, 506.667 )
+nodes/TimeScale/node = SubResource( 11 )
+nodes/TimeScale/position = Vector2( 293.333, 106.667 )
+"nodes/TimeScale 2/node" = SubResource( 9 )
+"nodes/TimeScale 2/position" = Vector2( 746.667, 346.667 )
+"nodes/TimeScale 3/node" = SubResource( 10 )
+"nodes/TimeScale 3/position" = Vector2( 400, 506.667 )
+"nodes/TimeScale 4/node" = SubResource( 33 )
+"nodes/TimeScale 4/position" = Vector2( 1261.67, 430 )
+"nodes/TimeScale 5/node" = SubResource( 36 )
+"nodes/TimeScale 5/position" = Vector2( 1667, 332 )
+nodes/aim_transition/node = SubResource( 12 )
+nodes/aim_transition/position = Vector2( 666.667, 106.667 )
+nodes/fall_anim/node = SubResource( 13 )
+nodes/fall_anim/position = Vector2( 240, 586.667 )
+nodes/hit/node = SubResource( 34 )
+nodes/hit/position = Vector2( 1120, 160 )
+nodes/hit_anim/node = SubResource( 35 )
+nodes/hit_anim/position = Vector2( 1027, 459.333 )
+nodes/idle/node = SubResource( 14 )
+nodes/idle/position = Vector2( 26.6667, 293.333 )
+nodes/iwr_blend/node = SubResource( 15 )
+nodes/iwr_blend/position = Vector2( 480, 213.333 )
+nodes/output/position = Vector2( 1706.67, 133.333 )
+nodes/run_scale/node = SubResource( 16 )
+nodes/run_scale/position = Vector2( 240, 400 )
+nodes/slide/node = SubResource( 17 )
+nodes/slide/position = Vector2( 853.333, 106.667 )
+nodes/slide_anim/node = SubResource( 18 )
+nodes/slide_anim/position = Vector2( 586.667, 400 )
+nodes/strafing/node = SubResource( 24 )
+nodes/strafing/position = Vector2( 26.6667, 106.667 )
+nodes/walk/node = SubResource( 25 )
+nodes/walk/position = Vector2( 26.6667, 400 )
+nodes/walk_scale/node = SubResource( 26 )
+nodes/walk_scale/position = Vector2( 240, 293.333 )
+nodes/withdraw/node = SubResource( 37 )
+nodes/withdraw/position = Vector2( 1413.33, 133.333 )
+nodes/withdraw_anim/node = SubResource( 38 )
+nodes/withdraw_anim/position = Vector2( 1466.67, 373.333 )
+node_connections = [ "slide", 0, "aim_transition", "slide", 1, "TimeScale 2", "output", 0, "withdraw", "TimeScale", 0, "strafing", "TimeScale 2", 0, "slide_anim", "TimeScale 3", 0, "fall_anim", "aim_transition", 0, "TimeScale", "aim_transition", 1, "iwr_blend", "aim_transition", 2, "TimeScale 3", "iwr_blend", 0, "idle", "iwr_blend", 1, "walk_scale", "iwr_blend", 2, "run_scale", "run_scale", 0, "Run", "walk_scale", 0, "walk", "hit", 0, "slide", "hit", 1, "TimeScale 4", "withdraw", 0, "hit", "withdraw", 1, "TimeScale 5", "TimeScale 4", 0, "hit_anim", "TimeScale 5", 0, "withdraw_anim" ]
+
+[node name="t_pose" instance=ExtResource( 3 )]
+
+[node name="Plane" parent="Armature/Skeleton" index="0"]
+material/0 = ExtResource( 1 )
+
+[node name="BoneAttachment" type="BoneAttachment" parent="Armature/Skeleton" index="1"]
+transform = Transform( -0.452007, -0.385187, 0.804562, 0.86922, 0.0123968, 0.494268, -0.20036, 0.922754, 0.32921, -31.1432, -22.788, -94.9204 )
+bone_name = "mixamorig_RightHand"
+
+[node name="blade" parent="Armature/Skeleton/BoneAttachment" index="0" instance=ExtResource( 2 )]
+transform = Transform( 19.6637, 22.1657, -26.8704, -3.44501, 31.9425, 23.8287, 34.6623, -9.39975, 17.6117, -3.49095, -1.79987, 2.35659 )
+
+[node name="AnimationTree" type="AnimationTree" parent="." index="2"]
+tree_root = SubResource( 32 )
+anim_player = NodePath("../AnimationPlayer")
+active = true
+parameters/TimeScale/scale = 1.0
+"parameters/TimeScale 2/scale" = 1.0
+"parameters/TimeScale 3/scale" = 1.0
+"parameters/TimeScale 4/scale" = 1.0
+"parameters/TimeScale 5/scale" = 1.0
+parameters/aim_transition/current = 1
+parameters/hit/active = false
+parameters/iwr_blend/blend_amount = -1.0
+parameters/run_scale/scale = 1.0
+parameters/slide/active = false
+parameters/strafing/blend_position = Vector2( 0.00472331, 0.00289011 )
+parameters/walk_scale/scale = 1.0
+parameters/withdraw/active = false

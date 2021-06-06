@@ -1,0 +1,64 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://blade.gd" type="Script" id=1]
+[ext_resource path="res://materials/blade.tres" type="Material" id=2]
+[ext_resource path="res://materials/metal.tres" type="Material" id=3]
+[ext_resource path="res://sounds/idleBlade.wav" type="AudioStream" id=4]
+[ext_resource path="res://sounds/openBlade.wav" type="AudioStream" id=5]
+[ext_resource path="res://sounds/closeBlade.wav" type="AudioStream" id=6]
+
+[sub_resource type="ParticlesMaterial" id=1]
+emission_shape = 2
+emission_box_extents = Vector3( 0.2, 1, 0.1 )
+gravity = Vector3( 0, -200, 0 )
+
+[sub_resource type="SphereMesh" id=2]
+material = ExtResource( 2 )
+radius = 0.01
+height = 0.1
+
+[node name="blade" type="Spatial"]
+script = ExtResource( 1 )
+
+[node name="CSGCombiner" type="CSGCombiner" parent="."]
+
+[node name="manche" type="CSGCylinder" parent="CSGCombiner"]
+radius = 0.07
+height = 0.8
+material = ExtResource( 3 )
+
+[node name="lame" type="CSGCylinder" parent="CSGCombiner/manche"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.64841, 0 )
+radius = 0.07
+height = 2.5
+sides = 3
+material = ExtResource( 2 )
+
+[node name="mask" type="CSGBox" parent="CSGCombiner/manche/lame"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2612, 0 )
+operation = 2
+width = 0.708467
+height = 5.1
+depth = 0.610337
+
+[node name="Particles" type="Particles" parent="CSGCombiner/manche/lame"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.512392, 0 )
+cast_shadow = 0
+emitting = false
+lifetime = 0.15
+speed_scale = 0.2
+explosiveness = 0.32
+randomness = 0.39
+visibility_aabb = AABB( -0.6, -1.63023, -0.6, 1.2, 1.82297, 1.2 )
+local_coords = false
+process_material = SubResource( 1 )
+draw_pass_1 = SubResource( 2 )
+
+[node name="idleSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource( 4 )
+
+[node name="openSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource( 5 )
+
+[node name="closeSound" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource( 6 )

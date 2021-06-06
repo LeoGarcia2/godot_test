@@ -1,0 +1,11 @@
+[gd_resource type="SpatialMaterial" load_steps=2 format=2]
+
+[ext_resource path="res://materials/black.tres" type="Material" id=1]
+
+[resource]
+next_pass = ExtResource( 1 )
+params_diffuse_mode = 4
+params_specular_mode = 3
+albedo_color = Color( 0.803922, 0.396078, 0.172549, 1 )
+metallic_specular = 0.19
+roughness = 0.08
