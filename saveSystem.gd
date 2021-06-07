@@ -4,14 +4,13 @@ var save_file = "user://godotgame.json"
 var default_data = {
 	"player": {
 		"position": {
-			"x": -18.716,
-			"y": 2.006,
-			"z": -16.30
+			"x": 0,
+			"y": 0,
+			"z": 0
 		}
 	}
 }
 var data = {}
-var quitting = false
 onready var player = get_node("../Player")
 
 func _input(event):
@@ -21,11 +20,11 @@ func _input(event):
 			get_tree().notification(MainLoop.NOTIFICATION_WM_QUIT_REQUEST)
 			save_game()
 		elif event.as_text() == "R":
-			quitting = true
-			data = default_data
-			print_debug("game resetted and saved")
-			get_tree().notification(MainLoop.NOTIFICATION_WM_QUIT_REQUEST)
-			save_game()
+			player.translation.x = default_data["player"]["position"]["x"]
+			player.translation.y = default_data["player"]["position"]["y"]
+			player.translation.z = default_data["player"]["position"]["z"]
+			print_debug("game resetted")
+			
 		
 func _ready():
 	get_tree().set_auto_accept_quit(false)
@@ -63,7 +62,6 @@ func _notification(what):
 		get_tree().quit()
 
 func _physics_process(delta):
-	if !quitting:
-		data["player"]["position"]["x"] = player.translation.x
-		data["player"]["position"]["y"] = player.translation.y
-		data["player"]["position"]["z"] = player.translation.z
+	data["player"]["position"]["x"] = player.translation.x
+	data["player"]["position"]["y"] = player.translation.y
+	data["player"]["position"]["z"] = player.translation.z

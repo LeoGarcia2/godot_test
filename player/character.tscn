@@ -1,23 +1,25 @@
-[gd_scene load_steps=30 format=2]
+[gd_scene load_steps=32 format=2]
 
 [ext_resource path="res://materials/skin.tres" type="Material" id=1]
 [ext_resource path="res://blade.tscn" type="PackedScene" id=2]
 [ext_resource path="res://player/t_pose.glb" type="PackedScene" id=3]
+[ext_resource path="res://player/helmet.tscn" type="PackedScene" id=4]
+[ext_resource path="res://grapple/grapple.tscn" type="PackedScene" id=5]
 
-[sub_resource type="AnimationNodeAnimation" id=8]
+[sub_resource type="AnimationNodeAnimation" id=1]
 animation = "running_loop"
 
-[sub_resource type="AnimationNodeTimeScale" id=9]
+[sub_resource type="AnimationNodeTimeScale" id=2]
 
-[sub_resource type="AnimationNodeTimeScale" id=10]
+[sub_resource type="AnimationNodeTimeScale" id=3]
 
-[sub_resource type="AnimationNodeTimeScale" id=33]
+[sub_resource type="AnimationNodeTimeScale" id=4]
 
-[sub_resource type="AnimationNodeTimeScale" id=36]
+[sub_resource type="AnimationNodeTimeScale" id=5]
 
-[sub_resource type="AnimationNodeTimeScale" id=11]
+[sub_resource type="AnimationNodeTimeScale" id=6]
 
-[sub_resource type="AnimationNodeTransition" id=12]
+[sub_resource type="AnimationNodeTransition" id=7]
 input_count = 3
 xfade_time = 0.15
 input_0/name = "aiming"
@@ -27,122 +29,140 @@ input_1/auto_advance = false
 input_2/name = "falling"
 input_2/auto_advance = false
 
-[sub_resource type="AnimationNodeAnimation" id=13]
+[sub_resource type="AnimationNodeAnimation" id=8]
 animation = "falling_loop"
 
-[sub_resource type="AnimationNodeOneShot" id=34]
+[sub_resource type="AnimationNodeOneShot" id=9]
 
-[sub_resource type="AnimationNodeAnimation" id=35]
+[sub_resource type="AnimationNodeAnimation" id=10]
 animation = "hit"
 
-[sub_resource type="AnimationNodeAnimation" id=14]
+[sub_resource type="AnimationNodeAnimation" id=11]
 animation = "idle_loop"
 
-[sub_resource type="AnimationNodeBlend3" id=15]
+[sub_resource type="AnimationNodeBlend3" id=12]
 
-[sub_resource type="AnimationNodeTimeScale" id=16]
+[sub_resource type="AnimationNodeTimeScale" id=13]
 
-[sub_resource type="AnimationNodeOneShot" id=17]
+[sub_resource type="AnimationNodeOneShot" id=14]
 
-[sub_resource type="AnimationNodeAnimation" id=18]
+[sub_resource type="AnimationNodeAnimation" id=15]
 animation = "slide"
 
-[sub_resource type="AnimationNodeAnimation" id=27]
+[sub_resource type="AnimationNodeAnimation" id=16]
 animation = "idle_loop"
 
-[sub_resource type="AnimationNodeAnimation" id=28]
+[sub_resource type="AnimationNodeAnimation" id=17]
 animation = "walk_loop"
 
-[sub_resource type="AnimationNodeAnimation" id=29]
+[sub_resource type="AnimationNodeAnimation" id=18]
 animation = "walk_backward_loop"
 
-[sub_resource type="AnimationNodeAnimation" id=30]
+[sub_resource type="AnimationNodeAnimation" id=19]
 animation = "left_strafe_loop"
 
-[sub_resource type="AnimationNodeAnimation" id=31]
+[sub_resource type="AnimationNodeAnimation" id=20]
 animation = "right_strafe_loop"
 
-[sub_resource type="AnimationNodeBlendSpace2D" id=24]
-blend_point_0/node = SubResource( 27 )
+[sub_resource type="AnimationNodeBlendSpace2D" id=21]
+blend_point_0/node = SubResource( 16 )
 blend_point_0/pos = Vector2( 0, 0 )
-blend_point_1/node = SubResource( 28 )
+blend_point_1/node = SubResource( 17 )
 blend_point_1/pos = Vector2( 0, 1 )
-blend_point_2/node = SubResource( 29 )
+blend_point_2/node = SubResource( 18 )
 blend_point_2/pos = Vector2( 0, -1 )
-blend_point_3/node = SubResource( 30 )
+blend_point_3/node = SubResource( 19 )
 blend_point_3/pos = Vector2( -1, 0 )
-blend_point_4/node = SubResource( 31 )
+blend_point_4/node = SubResource( 20 )
 blend_point_4/pos = Vector2( 1, 0 )
 
-[sub_resource type="AnimationNodeAnimation" id=25]
+[sub_resource type="AnimationNodeAnimation" id=22]
 animation = "walk_loop"
 
-[sub_resource type="AnimationNodeTimeScale" id=26]
+[sub_resource type="AnimationNodeTimeScale" id=23]
 
-[sub_resource type="AnimationNodeOneShot" id=37]
+[sub_resource type="AnimationNodeOneShot" id=24]
 
-[sub_resource type="AnimationNodeAnimation" id=38]
+[sub_resource type="AnimationNodeAnimation" id=25]
 animation = "withdraw"
 
-[sub_resource type="AnimationNodeBlendTree" id=32]
+[sub_resource type="AnimationNodeBlendTree" id=26]
 graph_offset = Vector2( 1168.15, 81.4802 )
-nodes/Run/node = SubResource( 8 )
+nodes/Run/node = SubResource( 1 )
 nodes/Run/position = Vector2( 26.6667, 506.667 )
-nodes/TimeScale/node = SubResource( 11 )
+nodes/TimeScale/node = SubResource( 6 )
 nodes/TimeScale/position = Vector2( 293.333, 106.667 )
-"nodes/TimeScale 2/node" = SubResource( 9 )
+"nodes/TimeScale 2/node" = SubResource( 2 )
 "nodes/TimeScale 2/position" = Vector2( 746.667, 346.667 )
-"nodes/TimeScale 3/node" = SubResource( 10 )
+"nodes/TimeScale 3/node" = SubResource( 3 )
 "nodes/TimeScale 3/position" = Vector2( 400, 506.667 )
-"nodes/TimeScale 4/node" = SubResource( 33 )
+"nodes/TimeScale 4/node" = SubResource( 4 )
 "nodes/TimeScale 4/position" = Vector2( 1261.67, 430 )
-"nodes/TimeScale 5/node" = SubResource( 36 )
+"nodes/TimeScale 5/node" = SubResource( 5 )
 "nodes/TimeScale 5/position" = Vector2( 1667, 332 )
-nodes/aim_transition/node = SubResource( 12 )
+nodes/aim_transition/node = SubResource( 7 )
 nodes/aim_transition/position = Vector2( 666.667, 106.667 )
-nodes/fall_anim/node = SubResource( 13 )
+nodes/fall_anim/node = SubResource( 8 )
 nodes/fall_anim/position = Vector2( 240, 586.667 )
-nodes/hit/node = SubResource( 34 )
+nodes/hit/node = SubResource( 9 )
 nodes/hit/position = Vector2( 1120, 160 )
-nodes/hit_anim/node = SubResource( 35 )
+nodes/hit_anim/node = SubResource( 10 )
 nodes/hit_anim/position = Vector2( 1027, 459.333 )
-nodes/idle/node = SubResource( 14 )
+nodes/idle/node = SubResource( 11 )
 nodes/idle/position = Vector2( 26.6667, 293.333 )
-nodes/iwr_blend/node = SubResource( 15 )
+nodes/iwr_blend/node = SubResource( 12 )
 nodes/iwr_blend/position = Vector2( 480, 213.333 )
 nodes/output/position = Vector2( 1706.67, 133.333 )
-nodes/run_scale/node = SubResource( 16 )
+nodes/run_scale/node = SubResource( 13 )
 nodes/run_scale/position = Vector2( 240, 400 )
-nodes/slide/node = SubResource( 17 )
+nodes/slide/node = SubResource( 14 )
 nodes/slide/position = Vector2( 853.333, 106.667 )
-nodes/slide_anim/node = SubResource( 18 )
+nodes/slide_anim/node = SubResource( 15 )
 nodes/slide_anim/position = Vector2( 586.667, 400 )
-nodes/strafing/node = SubResource( 24 )
+nodes/strafing/node = SubResource( 21 )
 nodes/strafing/position = Vector2( 26.6667, 106.667 )
-nodes/walk/node = SubResource( 25 )
+nodes/walk/node = SubResource( 22 )
 nodes/walk/position = Vector2( 26.6667, 400 )
-nodes/walk_scale/node = SubResource( 26 )
+nodes/walk_scale/node = SubResource( 23 )
 nodes/walk_scale/position = Vector2( 240, 293.333 )
-nodes/withdraw/node = SubResource( 37 )
+nodes/withdraw/node = SubResource( 24 )
 nodes/withdraw/position = Vector2( 1413.33, 133.333 )
-nodes/withdraw_anim/node = SubResource( 38 )
+nodes/withdraw_anim/node = SubResource( 25 )
 nodes/withdraw_anim/position = Vector2( 1466.67, 373.333 )
-node_connections = [ "slide", 0, "aim_transition", "slide", 1, "TimeScale 2", "output", 0, "withdraw", "TimeScale", 0, "strafing", "TimeScale 2", 0, "slide_anim", "TimeScale 3", 0, "fall_anim", "aim_transition", 0, "TimeScale", "aim_transition", 1, "iwr_blend", "aim_transition", 2, "TimeScale 3", "iwr_blend", 0, "idle", "iwr_blend", 1, "walk_scale", "iwr_blend", 2, "run_scale", "run_scale", 0, "Run", "walk_scale", 0, "walk", "hit", 0, "slide", "hit", 1, "TimeScale 4", "withdraw", 0, "hit", "withdraw", 1, "TimeScale 5", "TimeScale 4", 0, "hit_anim", "TimeScale 5", 0, "withdraw_anim" ]
+node_connections = [ "slide", 0, "aim_transition", "slide", 1, "TimeScale 2", "output", 0, "withdraw", "hit", 0, "slide", "hit", 1, "TimeScale 4", "withdraw", 0, "hit", "withdraw", 1, "TimeScale 5", "TimeScale", 0, "strafing", "TimeScale 2", 0, "slide_anim", "TimeScale 3", 0, "fall_anim", "TimeScale 4", 0, "hit_anim", "TimeScale 5", 0, "withdraw_anim", "aim_transition", 0, "TimeScale", "aim_transition", 1, "iwr_blend", "aim_transition", 2, "TimeScale 3", "iwr_blend", 0, "idle", "iwr_blend", 1, "walk_scale", "iwr_blend", 2, "run_scale", "run_scale", 0, "Run", "walk_scale", 0, "walk" ]
 
 [node name="t_pose" instance=ExtResource( 3 )]
+
+[node name="Skeleton" parent="Armature" index="0"]
+bones/6/bound_children = [ NodePath("helmet") ]
+bones/10/bound_children = [ NodePath("grapple") ]
+bones/14/bound_children = [ NodePath("BoneAttachment") ]
 
 [node name="Plane" parent="Armature/Skeleton" index="0"]
 material/0 = ExtResource( 1 )
 
 [node name="BoneAttachment" type="BoneAttachment" parent="Armature/Skeleton" index="1"]
-transform = Transform( -0.452007, -0.385187, 0.804562, 0.86922, 0.0123968, 0.494268, -0.20036, 0.922754, 0.32921, -31.1432, -22.788, -94.9204 )
+transform = Transform( -0.448525, -0.380183, 0.808879, 0.87101, 0.0170019, 0.490969, -0.200411, 0.924754, 0.323518, -30.9069, -22.6732, -94.9671 )
 bone_name = "mixamorig_RightHand"
 
 [node name="blade" parent="Armature/Skeleton/BoneAttachment" index="0" instance=ExtResource( 2 )]
 transform = Transform( 19.6637, 22.1657, -26.8704, -3.44501, 31.9425, 23.8287, 34.6623, -9.39975, 17.6117, -3.49095, -1.79987, 2.35659 )
 
+[node name="helmet" type="BoneAttachment" parent="Armature/Skeleton" index="2"]
+transform = Transform( 0.997845, -0.0656011, -0.00102696, 0.0162357, 0.231729, 0.972644, -0.0635685, -0.970565, 0.232295, -4.77387, 30.4456, -207.148 )
+bone_name = "mixamorig_HeadTop_End"
+
+[node name="helmet" parent="Armature/Skeleton/helmet" index="0" instance=ExtResource( 4 )]
+transform = Transform( 0.999744, 0.0213137, -0.00741065, -0.0218299, 0.996673, -0.0785311, 0.00571232, 0.0786723, 0.996884, 1.59322, 2.67886, -2.56075 )
+
+[node name="grapple" type="BoneAttachment" parent="Armature/Skeleton" index="3"]
+transform = Transform( 0.461452, 0.0191614, -0.886958, -0.700069, 0.621975, -0.350784, 0.544944, 0.782802, 0.300426, 30.379, 23.8223, -94.1821 )
+bone_name = "mixamorig_LeftHand"
+
+[node name="Spatial" parent="Armature/Skeleton/grapple" index="0" instance=ExtResource( 5 )]
+
 [node name="AnimationTree" type="AnimationTree" parent="." index="2"]
-tree_root = SubResource( 32 )
+tree_root = SubResource( 26 )
 anim_player = NodePath("../AnimationPlayer")
 active = true
 parameters/TimeScale/scale = 1.0

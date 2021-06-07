@@ -6,6 +6,5 @@
 next_pass = ExtResource( 1 )
 params_diffuse_mode = 4
 params_specular_mode = 3
-albedo_color = Color( 0.803922, 0.396078, 0.172549, 1 )
 metallic_specular = 0.19
 roughness = 0.08
