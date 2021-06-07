@@ -77,74 +77,79 @@ func _physics_process(delta):
 	if $slide_duration.is_stopped():
 	# INITIALISATION DU STATE
 		state = STANDING
-		$Camroot/h/v.translation = Vector3(0, lerp($Camroot/h/v.translation.y, 2.4, slide_cam_speed * delta), 0)
-		$CollisionShape.shape.height = 1.4
-		$CollisionShape.translation = Vector3(0, 1.1, 0)
 	else:
 	# SLIDING STATE
 		state = SLIDING
-		$Camroot/h/v.translation = Vector3(0, lerp($Camroot/h/v.translation.y, 0.4, slide_cam_speed * delta), 0)
-		$CollisionShape.shape.height = 0.4
-		$CollisionShape.translation = Vector3(0, 0.6, 0)
 	
+	if Input.is_action_pressed("aim"):		
+		if state != SLIDING && $touch_floor.is_colliding():
+	# AIMING STATE
+			state = AIMING
+
+	if Input.is_action_pressed("forward") || Input.is_action_pressed("backward") || Input.is_action_pressed("right") || Input.is_action_pressed("left"):
+		if state != SLIDING && state != AIMING:
+	# WALKING STATE
+			state = WALKING
+
+	if Input.is_action_pressed("sprint") && state == WALKING:
+	# RUNNING STATE
+		state = RUNNING
+	
+	if grapple_hook != null:
+	# GRAPPLING STATE
+		state = GRAPPLING
+
+	#BEGIN
+
 	var h_rot = $Camroot/h.global_transform.basis.get_euler().y
 	
 	if !$Mesh/t_pose/AnimationTree.get("parameters/hit/active"):
 		$Mesh/t_pose/Armature/Skeleton/BoneAttachment/blade.isHitting = false
 	else:
 		$Mesh/t_pose/Armature/Skeleton/BoneAttachment/blade.isHitting = true
-	
-	if state != SLIDING:
-		acceleration = 11
-	else:
-		acceleration = 6
-	
-	if Input.is_action_pressed("aim"):		
-		if state != SLIDING && $touch_floor.is_colliding():
-			$Mesh/t_pose/AnimationTree.set("parameters/aim_transition/current", 0)
-	# AIMING STATE
-			state = AIMING
-	else:
-		$Mesh/t_pose/AnimationTree.set("parameters/aim_transition/current", 1)
 
 	if $touch_floor.is_colliding():
 		if Input.is_action_just_pressed("jump"):
 			vertical_velocity = -jump_magnitude
-			
-	if Input.is_action_pressed("forward") || Input.is_action_pressed("backward") || Input.is_action_pressed("right") || Input.is_action_pressed("left"):		
+
+	#STATE CHECK
+	if state == STANDING:
+		movement_speed = 0
+		$Mesh/t_pose/AnimationTree.set("parameters/iwr_blend/blend_amount", lerp($Mesh/t_pose/AnimationTree.get("parameters/iwr_blend/blend_amount"), -1, delta * acceleration))
+		strafe_dir = Vector3.ZERO
+	else:
 		direction = Vector3(
 			Input.get_action_strength("left") - Input.get_action_strength("right"), 
 			0,
 			Input.get_action_strength("forward") - Input.get_action_strength("backward")
-		)
-		
-		strafe_dir = direction
-		
+		)		
+		strafe_dir = direction		
 		direction = direction.rotated(Vector3.UP, h_rot).normalized()
-	
-		if Input.is_action_pressed("sprint") && $Mesh/t_pose/AnimationTree.get("parameters/aim_transition/current") == 1:
-			if state != AIMING && state != SLIDING:
-	# RUNNING STATE
-				state = RUNNING
-			movement_speed = run_speed
-			$Mesh/t_pose/AnimationTree.set("parameters/iwr_blend/blend_amount", lerp($Mesh/t_pose/AnimationTree.get("parameters/iwr_blend/blend_amount"), 1, delta * acceleration))
-		else:
-			if state != AIMING && state != SLIDING:
-	# WALKING STATE
-				state = WALKING
-			movement_speed = walk_speed
-			$Mesh/t_pose/AnimationTree.set("parameters/iwr_blend/blend_amount", lerp($Mesh/t_pose/AnimationTree.get("parameters/iwr_blend/blend_amount"), 0, delta * acceleration))
-	else:
-		movement_speed = 0
-		$Mesh/t_pose/AnimationTree.set("parameters/iwr_blend/blend_amount", lerp($Mesh/t_pose/AnimationTree.get("parameters/iwr_blend/blend_amount"), -1, delta * acceleration))
-		strafe_dir = Vector3.ZERO
 		
-		if state == AIMING:
-			direction = $Camroot/h.global_transform.basis.z
+	if state == SLIDING:
+		acceleration = 6
+		$Camroot/h/v.translation = Vector3(0, lerp($Camroot/h/v.translation.y, 0.4, slide_cam_speed * delta), 0)
+		$CollisionShape.shape.height = 0.4
+		$CollisionShape.translation = Vector3(0, 0.6, 0)
+	else:
+		acceleration = 11
+		$Camroot/h/v.translation = Vector3(0, lerp($Camroot/h/v.translation.y, 2.4, slide_cam_speed * delta), 0)
+		$CollisionShape.shape.height = 1.4
+		$CollisionShape.translation = Vector3(0, 1.1, 0)
 
-	if grapple_hook != null:
-	# GRAPPLING STATE
-		state = GRAPPLING
+	if state == AIMING:
+		$Mesh/t_pose/AnimationTree.set("parameters/aim_transition/current", 0)
+		direction = $Camroot/h.global_transform.basis.z
+	else:
+		$Mesh/t_pose/AnimationTree.set("parameters/aim_transition/current", 1)
+
+	if state == WALKING:
+		movement_speed = walk_speed
+		$Mesh/t_pose/AnimationTree.set("parameters/iwr_blend/blend_amount", lerp($Mesh/t_pose/AnimationTree.get("parameters/iwr_blend/blend_amount"), 0, delta * acceleration))
+	
+	if state == RUNNING:	
+		movement_speed = run_speed
+		$Mesh/t_pose/AnimationTree.set("parameters/iwr_blend/blend_amount", lerp($Mesh/t_pose/AnimationTree.get("parameters/iwr_blend/blend_amount"), 1, delta * acceleration))
 			
 	if state == GRAPPLING:
 		movement_speed = 15
@@ -155,7 +160,7 @@ func _physics_process(delta):
 		var distance = grapple_base.distance_to(grapple_hook)
 		$Mesh/t_pose/Armature/Skeleton/grapple/Spatial/MeshInstance.scale = Vector3(1, 1, distance)
 		$Mesh/t_pose/Armature/Skeleton/grapple/Spatial/MeshInstance.translation = Vector3(0, 0, distance/2)
-		
+	# END STATE CHECK		
 		
 	velocity = lerp(velocity, direction * movement_speed, delta * acceleration)
 	
