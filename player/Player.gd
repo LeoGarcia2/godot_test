@@ -19,6 +19,7 @@ var strafe = Vector3.ZERO
 var movement_speed = 0
 var walk_speed = 4
 var run_speed = 7
+var grapple_speed = 15
 var jump_magnitude = 12
 
 var acceleration = 6
@@ -49,14 +50,16 @@ func _input(event):
 	
 	if event is InputEventKey:		
 	# AFFICHAGE DES INPUTS
+	
 		if event.as_text() == "Z" || event.as_text() == "S" || event.as_text() == "Q" || event.as_text() == "D" || event.as_text() == "Space" || event.as_text() == "Shift" || event.as_text() == "Alt":
 			if event.pressed:
 				get_node("Status/" + event.as_text()).color = Color("ff6666")
 			else:
 				get_node("Status/" + event.as_text()).color = Color("ffffff")
+				
 	# FIN DE L'AFFICHAGE DES INPUTS
 
-		if state != SLIDING:
+		if !$Mesh/t_pose/AnimationTree.get("parameters/slide/active"):
 			if event.is_action_pressed("slide") && state == RUNNING:
 				if $slide_window.is_stopped():
 					$slide_window.start()
@@ -74,33 +77,34 @@ func _physics_process(delta):
 	$is_grappling.text = "Target : " + str(grapple_hook)
 	# FIN DE L'AFFICHAGE DU DEBUG
 	
+	# INITIALISATION DU STATE	
+	# STANDING STATE
 	if $slide_duration.is_stopped():
-	# INITIALISATION DU STATE
 		state = STANDING
-	else:
 	# SLIDING STATE
+	else:
 		state = SLIDING
 	
+	# AIMING STATE
 	if Input.is_action_pressed("aim"):		
 		if state != SLIDING && $touch_floor.is_colliding():
-	# AIMING STATE
 			state = AIMING
 
+	# WALKING STATE
 	if Input.is_action_pressed("forward") || Input.is_action_pressed("backward") || Input.is_action_pressed("right") || Input.is_action_pressed("left"):
 		if state != SLIDING && state != AIMING:
-	# WALKING STATE
 			state = WALKING
 
-	if Input.is_action_pressed("sprint") && state == WALKING:
 	# RUNNING STATE
+	if Input.is_action_pressed("sprint") && state == WALKING:
 		state = RUNNING
 	
-	if grapple_hook != null:
 	# GRAPPLING STATE
+	if grapple_hook != null:
 		state = GRAPPLING
 
 	#BEGIN
-
+	movement_speed = walk_speed
 	var h_rot = $Camroot/h.global_transform.basis.get_euler().y
 	
 	if !$Mesh/t_pose/AnimationTree.get("parameters/hit/active"):
@@ -113,18 +117,18 @@ func _physics_process(delta):
 			vertical_velocity = -jump_magnitude
 
 	#STATE CHECK
-	if state == STANDING:
-		movement_speed = 0
-		$Mesh/t_pose/AnimationTree.set("parameters/iwr_blend/blend_amount", lerp($Mesh/t_pose/AnimationTree.get("parameters/iwr_blend/blend_amount"), -1, delta * acceleration))
-		strafe_dir = Vector3.ZERO
-	else:
+	if state == SLIDING || state == WALKING || state == RUNNING:
 		direction = Vector3(
 			Input.get_action_strength("left") - Input.get_action_strength("right"), 
 			0,
 			Input.get_action_strength("forward") - Input.get_action_strength("backward")
-		)		
+		)	
 		strafe_dir = direction		
-		direction = direction.rotated(Vector3.UP, h_rot).normalized()
+		direction = direction.rotated(Vector3.UP, h_rot).normalized()	
+
+	
+	if state == RUNNING || state == SLIDING:
+		movement_speed = run_speed
 		
 	if state == SLIDING:
 		acceleration = 6
@@ -137,22 +141,27 @@ func _physics_process(delta):
 		$CollisionShape.shape.height = 1.4
 		$CollisionShape.translation = Vector3(0, 1.1, 0)
 
+	if state == STANDING:
+		movement_speed = 0
+		$Mesh/t_pose/AnimationTree.set("parameters/iwr_blend/blend_amount", lerp($Mesh/t_pose/AnimationTree.get("parameters/iwr_blend/blend_amount"), -1, delta * acceleration))
+		strafe_dir = Vector3.ZERO
+
 	if state == AIMING:
 		$Mesh/t_pose/AnimationTree.set("parameters/aim_transition/current", 0)
-		direction = $Camroot/h.global_transform.basis.z
+
+		if movement_speed == 0:
+			direction = $Camroot/h.global_transform.basis.z
 	else:
 		$Mesh/t_pose/AnimationTree.set("parameters/aim_transition/current", 1)
 
 	if state == WALKING:
-		movement_speed = walk_speed
 		$Mesh/t_pose/AnimationTree.set("parameters/iwr_blend/blend_amount", lerp($Mesh/t_pose/AnimationTree.get("parameters/iwr_blend/blend_amount"), 0, delta * acceleration))
 	
-	if state == RUNNING:	
-		movement_speed = run_speed
+	if state == RUNNING:
 		$Mesh/t_pose/AnimationTree.set("parameters/iwr_blend/blend_amount", lerp($Mesh/t_pose/AnimationTree.get("parameters/iwr_blend/blend_amount"), 1, delta * acceleration))
-			
+
 	if state == GRAPPLING:
-		movement_speed = 15
+		movement_speed = grapple_speed
 		direction = grapple_hook - translation
 		direction = direction.normalized()
 		var grapple_base = $Mesh/t_pose/Armature/Skeleton/grapple.translation
@@ -160,8 +169,9 @@ func _physics_process(delta):
 		var distance = grapple_base.distance_to(grapple_hook)
 		$Mesh/t_pose/Armature/Skeleton/grapple/Spatial/MeshInstance.scale = Vector3(1, 1, distance)
 		$Mesh/t_pose/Armature/Skeleton/grapple/Spatial/MeshInstance.translation = Vector3(0, 0, distance/2)
-	# END STATE CHECK		
-		
+	# END STATE CHECK	
+
+	# ALWAYS	
 	velocity = lerp(velocity, direction * movement_speed, delta * acceleration)
 	
 	var iw_blend = (velocity.length() - walk_speed) / walk_speed
@@ -194,4 +204,4 @@ func _physics_process(delta):
 	$Mesh/t_pose/AnimationTree.set("parameters/strafing/blend_position", Vector2(-strafe.x, strafe.z))
 
 	aim_turn = 0	
-	$is_grappling.text = "STATE : " + str(state)
+	$is_grappling.text = "DIR : " + str(direction)
